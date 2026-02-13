@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: personal-tutor-rag
+    env: python
+    region: oregon
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: streamlit run app.py --server.port=$PORT --server.address=0.0.0.0
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: PIP_NO_BINARY
+        value: ""
+      - key: PIP_PREFER_BINARY
+        value: "1"
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: PINECONE_API_KEY
+        sync: false
