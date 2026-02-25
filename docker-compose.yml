@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  tutor-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tutor-app
+    ports:
+      - "8501:8501"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PINECONE_API_KEY=${PINECONE_API_KEY}
+      - PYTHONHTTPSVERIFY=0
+      - HF_HUB_DISABLE_SSL_VERIFY=1
+      - HF_HUB_DOWNLOAD_TIMEOUT=300
+    volumes:
+      # Mount the app directory for development (comment out for production)
+      - .:/app
+      # Preserve Python packages
+      - python-packages:/usr/local/lib/python3.11/site-packages
+    restart: unless-stopped
+    networks:
+      - tutor-network
+    # Optional: Add resource limits
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '2'
+    #       memory: 2G
+    #     reservations:
+    #       cpus: '1'
+    #       memory: 1G
+
+volumes:
+  python-packages:
+
+networks:
+  tutor-network:
+    driver: bridge
